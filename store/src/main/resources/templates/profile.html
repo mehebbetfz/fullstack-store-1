@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: html(content=~{::main}, pageTitle='Профиль')}">
+<head><title>Профиль</title></head>
+<body>
+<main>
+<div class="container py-4">
+    <h2 class="fw-bold mb-4"><i class="bi bi-person-circle me-2"></i>Мой профиль</h2>
+
+    <div class="row g-4">
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header fw-semibold bg-dark text-white">
+                    <i class="bi bi-person me-2"></i>Личные данные
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/profile/update}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Имя пользователя</label>
+                            <input type="text" class="form-control" th:value="${user.username}" readonly disabled/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Email</label>
+                            <input type="email" class="form-control" th:value="${user.email}" readonly disabled/>
+                        </div>
+                        <div class="row g-3">
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small">Имя</label>
+                                <input type="text" name="firstName" class="form-control" th:value="${user.firstName}"/>
+                            </div>
+                            <div class="col-6">
+                                <label class="form-label fw-semibold small">Фамилия</label>
+                                <input type="text" name="lastName" class="form-control" th:value="${user.lastName}"/>
+                            </div>
+                        </div>
+                        <div class="mb-3 mt-3">
+                            <label class="form-label fw-semibold small">Телефон</label>
+                            <input type="tel" name="phone" class="form-control" th:value="${user.phone}"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small">Адрес</label>
+                            <textarea name="address" class="form-control" rows="2" th:text="${user.address}"></textarea>
+                        </div>
+                        <button type="submit" class="btn btn-primary">
+                            <i class="bi bi-save me-2"></i>Сохранить
+                        </button>
+                    </form>
+                </div>
+            </div>
+        </div>
+
+        <div class="col-lg-6">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header fw-semibold bg-dark text-white">
+                    <i class="bi bi-lock me-2"></i>Смена пароля
+                </div>
+                <div class="card-body">
+                    <form th:action="@{/profile/password}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Текущий пароль</label>
+                            <input type="password" name="oldPassword" class="form-control" required/>
+                        </div>
+                        <div class="mb-3">
+                            <label class="form-label fw-semibold small">Новый пароль</label>
+                            <input type="password" name="newPassword" class="form-control" required minlength="6"/>
+                        </div>
+                        <div class="mb-4">
+                            <label class="form-label fw-semibold small">Подтверждение</label>
+                            <input type="password" name="confirmPassword" class="form-control" required/>
+                        </div>
+                        <button type="submit" class="btn btn-warning">
+                            <i class="bi bi-key me-2"></i>Изменить пароль
+                        </button>
+                    </form>
+                </div>
+            </div>
+
+            <div class="card border-0 shadow-sm mt-3">
+                <div class="card-body text-center">
+                    <i class="bi bi-box-seam fs-2 text-primary"></i>
+                    <p class="mb-2 mt-2">История ваших заказов</p>
+                    <a th:href="@{/orders}" class="btn btn-outline-primary btn-sm">
+                        Мои заказы <i class="bi bi-arrow-right ms-1"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

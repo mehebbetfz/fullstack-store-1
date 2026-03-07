@@ -1,0 +1,93 @@
+/* ===== GLOBAL ===== */
+body {
+    font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+    background-color: #f8f9fa;
+}
+
+/* ===== HERO ===== */
+.hero-section {
+    background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%);
+    min-height: 360px;
+    display: flex;
+    align-items: center;
+}
+
+/* ===== PRODUCT CARDS ===== */
+.product-card {
+    transition: transform 0.2s ease, box-shadow 0.2s ease;
+    border-radius: 12px;
+    overflow: hidden;
+}
+.product-card:hover {
+    transform: translateY(-4px);
+    box-shadow: 0 8px 24px rgba(0,0,0,0.12) !important;
+}
+
+.product-img-wrap {
+    position: relative;
+    overflow: hidden;
+    height: 200px;
+    background: #f8f9fa;
+}
+.product-img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+    padding: 8px;
+    transition: transform 0.3s ease;
+}
+.product-card:hover .product-img {
+    transform: scale(1.04);
+}
+
+/* ===== CATEGORY CARDS ===== */
+.category-card {
+    transition: transform 0.15s ease, box-shadow 0.15s ease;
+    border-radius: 12px;
+}
+.category-card:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 18px rgba(0,0,0,0.10) !important;
+}
+
+/* ===== NAVBAR ===== */
+.navbar-brand {
+    letter-spacing: -0.5px;
+}
+
+/* ===== CARDS ===== */
+.card {
+    border-radius: 12px;
+}
+
+/* ===== FORMS ===== */
+.form-control:focus, .form-select:focus {
+    border-color: #0d6efd;
+    box-shadow: 0 0 0 0.2rem rgba(13,110,253,0.15);
+}
+
+/* ===== ADMIN ===== */
+.table th {
+    font-size: 0.82rem;
+    font-weight: 600;
+    text-transform: uppercase;
+    letter-spacing: 0.04em;
+}
+
+/* ===== BADGES ===== */
+.badge {
+    font-weight: 500;
+    letter-spacing: 0.02em;
+}
+
+/* ===== PRICE ===== */
+.text-price {
+    color: #0d6efd;
+    font-weight: 700;
+}
+
+/* ===== RESPONSIVE ===== */
+@media (max-width: 576px) {
+    .hero-section { min-height: 240px; }
+    .product-img-wrap { height: 160px; }
+}

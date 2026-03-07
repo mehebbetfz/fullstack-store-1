@@ -1,0 +1,147 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      xmlns:sec="http://www.thymeleaf.org/extras/spring-security"
+      th:replace="~{layout :: html(content=~{::main})}">
+<head><title>TechShop</title></head>
+<body>
+<main>
+    <!-- Hero Section -->
+    <section class="hero-section text-white py-5">
+        <div class="container py-4">
+            <div class="row align-items-center">
+                <div class="col-lg-6">
+                    <h1 class="display-4 fw-bold mb-3">Лучшая техника<br>по лучшим ценам</h1>
+                    <p class="lead mb-4">Ноутбуки, смартфоны, планшеты и многое другое. Оригинальная техника с гарантией.</p>
+                    <div class="d-flex gap-3">
+                        <a th:href="@{/products}" class="btn btn-primary btn-lg px-4">
+                            <i class="bi bi-grid me-2"></i>Смотреть каталог
+                        </a>
+                        <a th:href="@{/auth/register}" class="btn btn-outline-light btn-lg px-4"
+                           sec:authorize="!isAuthenticated()">
+                            <i class="bi bi-person-plus me-2"></i>Регистрация
+                        </a>
+                    </div>
+                </div>
+                <div class="col-lg-6 text-center d-none d-lg-block">
+                    <i class="bi bi-laptop display-1 opacity-50"></i>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Categories -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <h2 class="fw-bold mb-4 text-center">Категории товаров</h2>
+            <div class="row g-3 justify-content-center">
+                <div class="col-6 col-md-4 col-lg-2" th:each="cat : ${ {
+                    {name: 'LAPTOPS', icon: 'bi-laptop', label: 'Ноутбуки'},
+                    {name: 'SMARTPHONES', icon: 'bi-phone', label: 'Смартфоны'},
+                    {name: 'TABLETS', icon: 'bi-tablet', label: 'Планшеты'},
+                    {name: 'MONITORS', icon: 'bi-display', label: 'Мониторы'},
+                    {name: 'HEADPHONES', icon: 'bi-headphones', label: 'Наушники'},
+                    {name: 'CAMERAS', icon: 'bi-camera', label: 'Камеры'} } }">
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=LAPTOPS)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-laptop fs-2 text-primary"></i><div class="fw-semibold mt-2 small">Ноутбуки</div></div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=SMARTPHONES)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-phone fs-2 text-success"></i><div class="fw-semibold mt-2 small">Смартфоны</div></div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=TABLETS)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-tablet fs-2 text-info"></i><div class="fw-semibold mt-2 small">Планшеты</div></div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=MONITORS)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-display fs-2 text-warning"></i><div class="fw-semibold mt-2 small">Мониторы</div></div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=HEADPHONES)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-headphones fs-2 text-danger"></i><div class="fw-semibold mt-2 small">Наушники</div></div>
+                    </a>
+                </div>
+                <div class="col-6 col-md-3 col-lg-2">
+                    <a th:href="@{/products(category=CAMERAS)}" class="card text-center text-decoration-none border-0 shadow-sm h-100 category-card">
+                        <div class="card-body py-3"><i class="bi bi-camera fs-2 text-secondary"></i><div class="fw-semibold mt-2 small">Камеры</div></div>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Newest Products -->
+    <section class="py-5">
+        <div class="container">
+            <div class="d-flex justify-content-between align-items-center mb-4">
+                <h2 class="fw-bold mb-0">Новинки</h2>
+                <a th:href="@{/products}" class="btn btn-outline-primary">Все товары <i class="bi bi-arrow-right ms-1"></i></a>
+            </div>
+            <div class="row g-3" th:if="${newestProducts != null and !newestProducts.isEmpty()}">
+                <div class="col-6 col-md-4 col-lg-3" th:each="product : ${newestProducts}">
+                    <div class="card h-100 shadow-sm product-card border-0">
+                        <div class="product-img-wrap">
+                            <img th:src="${product.imageUrl != null ? product.imageUrl : 'https://via.placeholder.com/300x200?text=No+Image'}"
+                                 class="card-img-top product-img" th:alt="${product.name}"/>
+                            <span class="badge bg-success position-absolute top-0 start-0 m-2" th:if="${product.stockQuantity > 0}">В наличии</span>
+                            <span class="badge bg-danger position-absolute top-0 start-0 m-2" th:if="${product.stockQuantity == 0}">Нет в наличии</span>
+                        </div>
+                        <div class="card-body d-flex flex-column">
+                            <div class="text-muted small mb-1" th:text="${product.category?.displayName}"></div>
+                            <h6 class="card-title fw-semibold" th:text="${product.name}"></h6>
+                            <div class="mt-auto pt-2">
+                                <div class="fw-bold text-primary fs-5" th:text="${#numbers.formatDecimal(product.price, 0, 'COMMA', 0, 'POINT') + ' ₽'}"></div>
+                                <div class="d-flex gap-2 mt-2">
+                                    <a th:href="@{/products/{id}(id=${product.id})}" class="btn btn-outline-secondary btn-sm flex-fill">Подробнее</a>
+                                    <form th:action="@{/cart/add}" method="post" sec:authorize="isAuthenticated()">
+                                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+                                        <input type="hidden" name="productId" th:value="${product.id}"/>
+                                        <button type="submit" class="btn btn-primary btn-sm" th:disabled="${product.stockQuantity == 0}">
+                                            <i class="bi bi-cart-plus"></i>
+                                        </button>
+                                    </form>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <!-- Features -->
+    <section class="py-5 bg-light">
+        <div class="container">
+            <div class="row g-4 text-center">
+                <div class="col-md-3">
+                    <i class="bi bi-truck fs-1 text-primary"></i>
+                    <h5 class="fw-semibold mt-3">Быстрая доставка</h5>
+                    <p class="text-muted small">Доставка по всей России от 1 дня</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-shield-check fs-1 text-success"></i>
+                    <h5 class="fw-semibold mt-3">Гарантия качества</h5>
+                    <p class="text-muted small">Официальная гарантия производителя</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-arrow-return-left fs-1 text-warning"></i>
+                    <h5 class="fw-semibold mt-3">Лёгкий возврат</h5>
+                    <p class="text-muted small">14 дней на возврат без вопросов</p>
+                </div>
+                <div class="col-md-3">
+                    <i class="bi bi-headset fs-1 text-danger"></i>
+                    <h5 class="fw-semibold mt-3">Поддержка 24/7</h5>
+                    <p class="text-muted small">Всегда на связи, готовы помочь</p>
+                </div>
+            </div>
+        </div>
+    </section>
+</main>
+</body>
+</html>
