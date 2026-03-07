@@ -15,10 +15,6 @@
                             <p class="text-muted small">Создайте аккаунт TechShop</p>
                         </div>
 
-                        <div class="alert alert-danger" th:if="${error}">
-                            <i class="bi bi-exclamation-triangle me-2"></i><span th:text="${error}"></span>
-                        </div>
-
                         <form th:action="@{/auth/register}" th:object="${registerDto}" method="post">
                             <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
 

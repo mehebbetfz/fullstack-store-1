@@ -32,8 +32,19 @@ public class AuthController {
 
     @PostMapping("/register")
     public String register(@ModelAttribute("registerDto") RegisterDto dto, BindingResult result, RedirectAttributes redirectAttributes, Model model) {
-        userService.register(dto);
-        return "auth/register";
+
+        if (result.hasErrors()) {
+            return "auth/register";
+        }
+
+        try {
+            userService.register(dto);
+            redirectAttributes.addFlashAttribute("success", "Регистрация прошла успешно! Войдите в систему.");
+            return "redirect:/auth/login";
+        } catch(IllegalArgumentException e) {
+            model.addAttribute("error", e.getMessage());
+            return "auth/register";
+        }
     }
 }
 
