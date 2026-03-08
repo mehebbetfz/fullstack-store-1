@@ -7,6 +7,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
+import java.math.BigDecimal;
 import java.util.List;
 import java.util.Optional;
 
@@ -56,5 +57,25 @@ public class ProductService {
 
     public List<Product> findNewest() {
         return productRepository.findTop8ByActiveTrueOrderByCreatedAtDesc();
+    }
+
+    public Page<Product> search(String query, Pageable pageable) {
+        return productRepository.searchProducts(query, pageable);
+    }
+
+    public Page<Product> findByCategory(Product.Category category, Pageable pageable) {
+        return productRepository.findByCategoryAndActiveTrue(category, pageable);
+    }
+
+    public Page<Product> filter(Product.Category category, BigDecimal minPrice, BigDecimal maxPrice, String brand, Pageable pageable) {
+        return productRepository.filterProducts(category, minPrice, maxPrice, brand, pageable);
+    }
+
+    public Page<Product> findAllActive(Pageable pageable) {
+        return productRepository.findByActiveTrue(pageable);
+    }
+
+    public List<String> findAllBrands() {
+        return productRepository.findDistinctBrandByActiveTrue();
     }
 }
