@@ -103,7 +103,7 @@
                 <div class="card-body">
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Товаров:</span>
-                        <span th:text="${cart.totalItems}"></span>
+                        <span th:text="${cart.getTotalItems()}"></span>
                     </div>
                     <div class="d-flex justify-content-between mb-2">
                         <span class="text-muted">Доставка:</span>
@@ -113,7 +113,7 @@
                     <div class="d-flex justify-content-between mb-3 fw-bold fs-5">
                         <span>Итого:</span>
                         <span class="text-primary"
-                              th:text="${#numbers.formatDecimal(cart.totalPrice, 0, 'COMMA', 0, 'POINT') + ' ₽'}"></span>
+                              th:text="${#numbers.formatDecimal(cart.getTotalPrice(), 0, 'COMMA', 0, 'POINT') + ' ₽'}"></span>
                     </div>
                     <div class="d-grid">
                         <a th:href="@{/orders/checkout}" class="btn btn-primary btn-lg">

@@ -1,11 +1,15 @@
 package com.my.store.service;
 
 import com.my.store.dto.RegisterDto;
+import com.my.store.model.Cart;
 import com.my.store.model.User;
+import com.my.store.repository.CartRepository;
 import com.my.store.repository.UserRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
+
+import java.util.Optional;
 
 @Service
 @RequiredArgsConstructor
@@ -13,6 +17,7 @@ public class UserService {
 
     private final UserRepository userRepository;
     private final PasswordEncoder passwordEncoder;
+    private final CartRepository cartRepository;
 
     public void register(RegisterDto dto) {
         if (userRepository.existsByUsername(dto.getUsername())) {
@@ -36,6 +41,14 @@ public class UserService {
         user.setPhone(dto.getPhone());
         user.setRole(User.Role.USER);
 
-        userRepository.save(user);
+        User saved = userRepository.save(user);
+
+        Cart cart = new Cart();
+        cart.setUser(saved);
+        cartRepository.save(cart);
+    }
+
+    public Optional<User> findByUsername(String username) {
+        return userRepository.findByUsername(username);
     }
 }
