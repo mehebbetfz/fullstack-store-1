@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: html(content=~{::main}, pageTitle='Регистрация')}">
+<head><title>Регистрация</title></head>
+<body>
+<main>
+    <div class="container py-5">
+        <div class="row justify-content-center">
+            <div class="col-md-6 col-lg-5">
+                <div class="card shadow border-0">
+                    <div class="card-body p-4">
+                        <div class="text-center mb-4">
+                            <i class="bi bi-person-plus-fill fs-1 text-primary"></i>
+                            <h3 class="fw-bold mt-2">Регистрация</h3>
+                            <p class="text-muted small">Создайте аккаунт TechShop</p>
+                        </div>
+
+                        <form th:action="@{/auth/register}" th:object="${registerDto}" method="post">
+                            <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                            <div class="row g-3">
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Имя</label>
+                                    <input type="text" th:field="*{firstName}" class="form-control" placeholder="Иван"/>
+                                </div>
+                                <div class="col-md-6">
+                                    <label class="form-label fw-semibold">Фамилия</label>
+                                    <input type="text" th:field="*{lastName}" class="form-control" placeholder="Иванов"/>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Имя пользователя <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-person"></i></span>
+                                        <input type="text" th:field="*{username}"
+                                               th:class="${#fields.hasErrors('username')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="username" required/>
+                                    </div>
+                                    <div class="invalid-feedback" th:errors="*{username}"></div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Email <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-envelope"></i></span>
+                                        <input type="email" th:field="*{email}"
+                                               th:class="${#fields.hasErrors('email')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="email@example.com" required/>
+                                    </div>
+                                    <div class="invalid-feedback" th:errors="*{email}"></div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Телефон</label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-telephone"></i></span>
+                                        <input type="tel" th:field="*{phone}" class="form-control" placeholder="+7 (999) 000-00-00"/>
+                                    </div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Пароль <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock"></i></span>
+                                        <input type="password" th:field="*{password}"
+                                               th:class="${#fields.hasErrors('password')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="Минимум 6 символов" required/>
+                                    </div>
+                                    <div class="invalid-feedback" th:errors="*{password}"></div>
+                                </div>
+                                <div class="col-12">
+                                    <label class="form-label fw-semibold">Подтверждение пароля <span class="text-danger">*</span></label>
+                                    <div class="input-group">
+                                        <span class="input-group-text"><i class="bi bi-lock-fill"></i></span>
+                                        <input type="password" th:field="*{confirmPassword}"
+                                               th:class="${#fields.hasErrors('confirmPassword')} ? 'form-control is-invalid' : 'form-control'"
+                                               placeholder="Повторите пароль" required/>
+                                    </div>
+                                    <div class="invalid-feedback" th:errors="*{confirmPassword}"></div>
+                                </div>
+                                <div class="col-12 d-grid mt-2">
+                                    <button type="submit" class="btn btn-primary btn-lg">
+                                        <i class="bi bi-person-check me-2"></i>Зарегистрироваться
+                                    </button>
+                                </div>
+                            </div>
+                        </form>
+
+                        <hr/>
+                        <p class="text-center mb-0">
+                            Уже есть аккаунт?
+                            <a th:href="@{/auth/login}" class="text-primary fw-semibold">Войти</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+</body>
+</html>

@@ -1,0 +1,148 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: html(content=~{::main}, pageTitle='Панель управления')}">
+<head><title>Панель управления</title></head>
+<body>
+<main>
+<div class="container-fluid py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0"><i class="bi bi-gear me-2"></i>Панель управления</h2>
+        <div class="badge bg-warning text-dark fs-6">ADMIN</div>
+    </div>
+
+    <!-- Stats -->
+    <div class="row g-3 mb-4">
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-white bg-primary">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small opacity-75">Всего товаров</div>
+                            <div class="display-6 fw-bold" th:text="${totalProducts}">0</div>
+                        </div>
+                        <i class="bi bi-box-seam display-4 opacity-50"></i>
+                    </div>
+                    <a th:href="@{/admin/products}" class="text-white text-decoration-none small">
+                        Управление → </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-white bg-success">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small opacity-75">Всего заказов</div>
+                            <div class="display-6 fw-bold" th:text="${totalOrders}">0</div>
+                        </div>
+                        <i class="bi bi-cart-check display-4 opacity-50"></i>
+                    </div>
+                    <a th:href="@{/admin/orders}" class="text-white text-decoration-none small">
+                        Управление → </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-white bg-info">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small opacity-75">Пользователей</div>
+                            <div class="display-6 fw-bold" th:text="${totalUsers}">0</div>
+                        </div>
+                        <i class="bi bi-people display-4 opacity-50"></i>
+                    </div>
+                    <a th:href="@{/admin/users}" class="text-white text-decoration-none small">
+                        Управление → </a>
+                </div>
+            </div>
+        </div>
+        <div class="col-md-3">
+            <div class="card border-0 shadow-sm text-dark bg-warning">
+                <div class="card-body">
+                    <div class="d-flex justify-content-between align-items-center">
+                        <div>
+                            <div class="small opacity-75">Ожидают обработки</div>
+                            <div class="display-6 fw-bold" th:text="${pendingOrders}">0</div>
+                        </div>
+                        <i class="bi bi-hourglass-split display-4 opacity-50"></i>
+                    </div>
+                    <a th:href="@{/admin/orders}" class="text-dark text-decoration-none small">
+                        Просмотреть → </a>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <div class="row g-4">
+        <!-- Recent orders -->
+        <div class="col-lg-7">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header d-flex justify-content-between align-items-center bg-dark text-white">
+                    <span class="fw-semibold"><i class="bi bi-clock me-2"></i>Последние заказы</span>
+                    <a th:href="@{/admin/orders}" class="btn btn-sm btn-outline-light">Все заказы</a>
+                </div>
+                <div class="table-responsive">
+                    <table class="table table-hover align-middle mb-0">
+                        <thead class="table-light">
+                            <tr>
+                                <th class="ps-3">ID</th>
+                                <th>Клиент</th>
+                                <th>Сумма</th>
+                                <th>Статус</th>
+                                <th></th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr th:each="order : ${recentOrders}">
+                                <td class="ps-3 fw-semibold">#<span th:text="${order.id}"></span></td>
+                                <td th:text="${order.user.username}"></td>
+                                <td class="text-primary fw-semibold small"
+                                    th:text="${#numbers.formatDecimal(order.totalAmount, 0, 'COMMA', 0, 'POINT') + ' ₽'}"></td>
+                                <td>
+                                    <span th:text="${order.status.displayName}"
+                                          th:class="${'badge small ' + (order.status.name() == 'PENDING' ? 'bg-warning text-dark' :
+                                                    order.status.name() == 'DELIVERED' ? 'bg-success' :
+                                                    order.status.name() == 'CANCELLED' ? 'bg-danger' : 'bg-primary')}"></span>
+                                </td>
+                                <td>
+                                    <a th:href="@{/admin/orders/{id}(id=${order.id})}"
+                                       class="btn btn-outline-primary btn-sm">→</a>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+
+        <!-- Quick actions -->
+        <div class="col-lg-5">
+            <div class="card border-0 shadow-sm">
+                <div class="card-header fw-semibold bg-dark text-white">
+                    <i class="bi bi-lightning me-2"></i>Быстрые действия
+                </div>
+                <div class="card-body d-grid gap-2">
+                    <a th:href="@{/admin/products/new}" class="btn btn-primary">
+                        <i class="bi bi-plus-circle me-2"></i>Добавить товар
+                    </a>
+                    <a th:href="@{/admin/products}" class="btn btn-outline-primary">
+                        <i class="bi bi-list me-2"></i>Все товары
+                    </a>
+                    <a th:href="@{/admin/orders}" class="btn btn-outline-success">
+                        <i class="bi bi-cart me-2"></i>Управление заказами
+                    </a>
+                    <a th:href="@{/admin/users}" class="btn btn-outline-info">
+                        <i class="bi bi-people me-2"></i>Пользователи
+                    </a>
+                    <a th:href="@{/}" class="btn btn-outline-secondary">
+                        <i class="bi bi-house me-2"></i>На сайт
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+</main>
+</body>
+</html>

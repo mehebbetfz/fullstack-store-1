@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="ru" xmlns:th="http://www.thymeleaf.org"
+      th:replace="~{layout :: html(content=~{::main}, pageTitle=${product.id == null ? 'Новый товар' : 'Редактирование товара'})}">
+<head><title>Товар</title></head>
+<body>
+<main>
+<div class="container py-4">
+    <div class="d-flex justify-content-between align-items-center mb-4">
+        <h2 class="fw-bold mb-0" th:text="${product.id == null ? 'Добавить товар' : 'Редактировать товар'}"></h2>
+        <a th:href="@{/admin/products}" class="btn btn-outline-secondary btn-sm">
+            <i class="bi bi-arrow-left me-1"></i>Назад
+        </a>
+    </div>
+
+    <div class="row justify-content-center">
+        <div class="col-lg-8">
+            <div class="card border-0 shadow-sm">
+                <div class="card-body p-4">
+                    <form th:action="${product.id == null ? '/admin/products/new' : '/admin/products/' + product.id + '/edit'}"
+                          th:object="${product}" method="post">
+                        <input type="hidden" th:name="${_csrf.parameterName}" th:value="${_csrf.token}"/>
+
+                        <div class="row g-3">
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Название <span class="text-danger">*</span></label>
+                                <input type="text" th:field="*{name}"
+                                       th:class="${#fields.hasErrors('name')} ? 'form-control is-invalid' : 'form-control'"
+                                       placeholder="Название товара" required/>
+                                <div class="invalid-feedback" th:errors="*{name}"></div>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Бренд</label>
+                                <input type="text" th:field="*{brand}" class="form-control" placeholder="Apple, Samsung..."/>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Модель</label>
+                                <input type="text" th:field="*{model}" class="form-control" placeholder="iPhone 15 Pro"/>
+                            </div>
+                            <div class="col-md-6">
+                                <label class="form-label fw-semibold">Категория <span class="text-danger">*</span></label>
+                                <select th:field="*{category}" class="form-select" required>
+                                    <option value="">Выберите категорию</option>
+                                    <option th:each="cat : ${categories}"
+                                            th:value="${cat.name()}"
+                                            th:text="${cat.displayName}"></option>
+                                </select>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Цена (₽) <span class="text-danger">*</span></label>
+                                <div class="input-group">
+                                    <input type="number" th:field="*{price}"
+                                           th:class="${#fields.hasErrors('price')} ? 'form-control is-invalid' : 'form-control'"
+                                           step="0.01" min="0" placeholder="0.00" required/>
+                                    <span class="input-group-text">₽</span>
+                                </div>
+                                <div class="invalid-feedback" th:errors="*{price}"></div>
+                            </div>
+                            <div class="col-md-3">
+                                <label class="form-label fw-semibold">Количество на складе</label>
+                                <input type="number" th:field="*{stockQuantity}" class="form-control" min="0" placeholder="0"/>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">URL изображения</label>
+                                <input type="url" th:field="*{imageUrl}" class="form-control"
+                                       placeholder="https://..." id="imageUrlInput"
+                                       oninput="previewImage(this.value)"/>
+                                <div class="mt-2" id="imagePreview" th:if="${product.imageUrl}">
+                                    <img th:src="${product.imageUrl}" style="max-height:150px" class="rounded border"/>
+                                </div>
+                            </div>
+                            <div class="col-12">
+                                <label class="form-label fw-semibold">Описание</label>
+                                <textarea th:field="*{description}" class="form-control" rows="4"
+                                          placeholder="Описание товара..."></textarea>
+                            </div>
+                            <div class="col-12">
+                                <div class="form-check form-switch">
+                                    <input type="checkbox" th:field="*{active}" class="form-check-input"
+                                           role="switch" id="activeCheck"/>
+                                    <label class="form-check-label fw-semibold" for="activeCheck">Активен (виден покупателям)</label>
+                                </div>
+                            </div>
+                            <div class="col-12 d-flex gap-3 mt-2">
+                                <button type="submit" class="btn btn-primary px-4">
+                                    <i class="bi bi-save me-2"></i>
+                                    <span th:text="${product.id == null ? 'Создать' : 'Сохранить'}"></span>
+                                </button>
+                                <a th:href="@{/admin/products}" class="btn btn-outline-secondary">Отмена</a>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<script>
+    function previewImage(url) {
+        const preview = document.getElementById('imagePreview');
+        if (url) {
+            preview.innerHTML = '<img src="' + url + '" style="max-height:150px" class="rounded border" onerror="this.style.display=\'none\'"/>';
+        } else {
+            preview.innerHTML = '';
+        }
+    }
+</script>
+</main>
+</body>
+</html>
