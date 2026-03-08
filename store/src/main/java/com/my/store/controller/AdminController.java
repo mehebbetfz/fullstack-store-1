@@ -1,7 +1,10 @@
 package com.my.store.controller;
 
+import com.my.store.model.Order;
 import com.my.store.model.Product;
+import com.my.store.service.OrderService;
 import com.my.store.service.ProductService;
+import com.my.store.service.UserService;
 import lombok.RequiredArgsConstructor;
 import org.springframework.data.domain.PageRequest;
 import org.springframework.data.domain.Sort;
@@ -17,6 +20,25 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 public class AdminController {
 
     private final ProductService productService;
+    private final OrderService orderService;
+    private final UserService userService;
+
+
+
+    @GetMapping
+    public String dashboard(Model model) {
+        model.addAttribute("totalProducts", productService.findAll(PageRequest.of(0, 1)).getTotalElements());
+        model.addAttribute("totalOrders", orderService.findAll(PageRequest.of(0, 1)).getTotalElements());
+        model.addAttribute("totalUsers", userService.findAll().size());
+        model.addAttribute("pendingOrders", orderService.countByStatus(Order.OrderStatus.PENDING));
+        model.addAttribute("newestProducts", productService.findNewest());
+        model.addAttribute("recentOrders", orderService.findAll(PageRequest.of(0, 5,
+                Sort.by(Sort.Direction.DESC, "createdAt"))).getContent());
+
+        return "admin/dashboard";
+    }
+
+
 
     @GetMapping("/products")
     public String productList(@RequestParam(defaultValue = "0") int page, Model model) {

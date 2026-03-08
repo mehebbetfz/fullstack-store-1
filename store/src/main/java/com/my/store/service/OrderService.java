@@ -4,6 +4,8 @@ import com.my.store.dto.OrderDto;
 import com.my.store.model.*;
 import com.my.store.repository.OrderRepository;
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import java.math.BigDecimal;
@@ -68,5 +70,11 @@ public class OrderService {
         return  orderRepository.findById(id);
     }
 
+    public Page<Order> findAll(Pageable pageable) {
+        return orderRepository.findAllByOrderByCreatedAtDesc(pageable);
+    }
 
+    public long countByStatus(Order.OrderStatus status) {
+        return orderRepository.countByStatus(status);
+    }
 }
