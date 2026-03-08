@@ -77,4 +77,11 @@ public class OrderService {
     public long countByStatus(Order.OrderStatus status) {
         return orderRepository.countByStatus(status);
     }
+
+    public void updateStatus(Long orderId, Order.OrderStatus newStatus) {
+        Order order = orderRepository.findById(orderId).orElseThrow(() -> new RuntimeException("Заказ не найден"));
+
+        order.setStatus(newStatus);
+        orderRepository.save(order);
+    }
 }

@@ -115,4 +115,47 @@ public class AdminController {
         return "redirect:/admin/products";
     }
 
+    @GetMapping("/orders")
+    public String orderList(@RequestParam(defaultValue = "0") int page, Model model) {
+        model.addAttribute("orders", orderService.findAll(
+                PageRequest.of(page, 20, Sort.by(Sort.Direction.DESC, "createdAt"))));
+
+        model.addAttribute("currentPage", page);
+        model.addAttribute("statuses", Order.OrderStatus.values());
+        return "admin/orders";
+    }
+
+    @GetMapping("/orders/{id}")
+    public String orderDetail(@PathVariable Long id, Model model) {
+        model.addAttribute("order", orderService.findById(id).orElseThrow(() -> new RuntimeException("Заказ не найден")));
+        model.addAttribute("statuses", Order.OrderStatus.values());
+        return "admin/order-detail";
+    }
+
+    @PostMapping("/orders/{id}/status")
+    public String updateOrderStatus(
+            @PathVariable Long id,
+            @RequestParam String status,
+            RedirectAttributes redirectAttributes
+    ) {
+        orderService.updateStatus(id, Order.OrderStatus.valueOf(status));
+        redirectAttributes.addFlashAttribute("success", "Статус заказа обновлен");
+        return "redirect:/admin/orders/" + id;
+    }
+
+    @GetMapping("/users")
+    public String userList(Model model) {
+        model.addAttribute("users", userService.findAll());
+        return "admin/users";
+    }
+
+    @PostMapping("/users/{id}/toggle")
+    public String toggleUser(
+            @PathVariable Long id, RedirectAttributes redirectAttributes
+    ) {
+        userService.toggleUserStatus(id);
+        redirectAttributes.addFlashAttribute("success", "Статус пользователя изменен");
+        return "redirect:/admin/users";
+    }
+
 }

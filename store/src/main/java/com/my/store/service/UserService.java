@@ -80,4 +80,10 @@ public class UserService {
     public List<User> findAll() {
         return userRepository.findAll();
     }
+
+    public void toggleUserStatus(Long userId) {
+        User user = userRepository.findById(userId).orElseThrow(() -> new RuntimeException("Пользователь не найден"));
+        user.setEnabled(!user.isEnabled());
+        userRepository.save(user);
+    }
 }
